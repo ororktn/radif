@@ -16,15 +16,15 @@
  */
 
 pub use radif_macros::*;
-mod adif;
+pub mod adif;
 mod data;
-mod enumerations;
+pub mod enumerations;
 mod error;
-mod field;
-mod fields;
+pub mod field;
+pub mod fields;
 mod file;
-mod header;
-mod qso;
+pub mod header;
+pub mod qso;
 mod result;
 mod utilities;
 
