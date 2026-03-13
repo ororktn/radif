@@ -31,6 +31,7 @@ mod utilities;
 pub use data::AdifData;
 pub use error::AdifError;
 pub use file::parse;
+pub use file::sync_parse;
 
 #[cfg(feature = "tokio")]
 pub use file::parse_tokio;

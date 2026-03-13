@@ -23,6 +23,7 @@ use crate::header::HeaderField;
 use crate::qso::{QSOField, QSO};
 use crate::result;
 use futures::{AsyncRead, AsyncReadExt};
+use std::io::Read;
 
 #[derive(Debug, PartialEq)]
 enum FieldState {
@@ -58,6 +59,29 @@ impl Default for State {
             adif: Adif::default(),
         }
     }
+}
+
+pub fn sync_parse<R>(mut reader: R) -> result::Result<Adif>
+where
+    R: Read,
+{
+    let mut state = State::default();
+    let mut buffer = [0u8; 4096]; // Read in chunks for better performance
+
+    loop {
+        match reader.read(&mut buffer) {
+            Ok(0) => break, // EOF
+            Ok(n) => {
+                for &byte in &buffer[..n] {
+                    let c = byte as char;
+                    parse_adif_char(&mut state, c)?;
+                }
+            }
+            Err(e) => return Err(DeserializeError(e.to_string())),
+        }
+    }
+
+    Ok(state.adif)
 }
 
 pub async fn parse<R>(mut reader: R) -> result::Result<Adif>
