@@ -73,7 +73,7 @@ impl Display for QSOField {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct QSO {
-    qso: Vec<QSOField>,
+    pub qso: Vec<QSOField>,
 }
 
 impl Default for QSO {
